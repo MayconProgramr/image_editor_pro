@@ -24,5 +24,9 @@
 - **Decisão:** Em `example/android`: Gradle 8.9→8.14, AGP 8.7.2→8.11.1, Kotlin 1.8.22→2.2.20, `compileSdk` 35→36, `ndkVersion` "28.0.12674087 rc2" (valor inválido/com sufixo de release-candidate) → "28.0.12674087".
 - **Motivo:** Build Android do `example/` estava falhando (`Gradle version... is lower than Flutter's minimum supported version` e depois erro do `sdkmanager` por causa do ndkVersion malformado). `app-vistoria` já builda em produção com essas versões, serviu de referência pra não ter que decidir valores no escuro.
 
+## [2026-09-16] Tag v6.4 pras correções de lint + Android
+- **Decisão:** Publicada tag `v6.4` (lint fix em `lib/` + alinhamento Android do `example/`), `app-vistoria/pubspec.yaml` apontado pra `v6.4`. Validado com `pub get` + `flutter analyze` (limpo) + `pod install` + `flutter build ios --simulator --no-codesign` (sucesso) direto em `app-vistoria`.
+- **Motivo:** Consumidor real só recebe correções de uma tag nova; `v6.3` não tinha os fixes de lint/Android feitos nesta sessão.
+
 ---
 > Decisões anteriores arquivadas em: ai-memory/history/decisions-history.md
