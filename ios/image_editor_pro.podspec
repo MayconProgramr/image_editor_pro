@@ -14,7 +14,6 @@ Image Editor  Plugin  for Both Android and IOS
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'image_editor_pro/Sources/image_editor_pro/**/*'
-  s.public_header_files = 'image_editor_pro/Sources/image_editor_pro/include/**/*.h'
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
 
