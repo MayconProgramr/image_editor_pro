@@ -16,9 +16,6 @@ const _kThumbShadowColor = Color(0x44000000);
 /// A padding used to calculate bar height(thumbRadius * 2 - kBarPadding).
 const _kBarPadding = 4;
 
-/// Base64 encoded image for alpha picker background
-const _kAlphaTexture = "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==";
-
 /// A bar color picker
 class BarColorPicker extends StatefulWidget {
 
@@ -58,14 +55,7 @@ class BarColorPicker extends StatefulWidget {
     this.initialColor = const Color(0xffff0000),
     this.thumbColor = Colors.black,
     required this.colorListener,
-  })
-    : assert(pickMode != null),
-      assert(horizontal != null),
-      assert(width != null),
-      assert(cornerRadius != null),
-      assert(colorListener != null),
-      assert(initialColor != null),
-      super(key: key);
+  }) : super(key: key);
 
   @override
   _BarColorPickerState createState() => _BarColorPickerState();
@@ -208,13 +198,13 @@ class _BarColorPickerState extends State<BarColorPicker> {
     switch (widget.pickMode) {
       case PickMode.Color:
         Color color = HSVColor.fromAHSV(1.0, percent * 360, 1.0, 1.0).toColor();
-        widget.colorListener(color.value);
+        widget.colorListener(color.toARGB32());
         break;
       case PickMode.Grey:
         final int channel = (0xff * percent).toInt();
         widget.colorListener(Color
           .fromARGB(0xff, channel, channel, channel)
-          .value);
+          .toARGB32());
         break;
     }
   }
@@ -245,11 +235,7 @@ class CircleColorPicker extends StatefulWidget {
     this.thumbColor = Colors.black,
     this.thumbRadius = 8,
     required this.colorListener
-  })
-    : assert (radius != null),
-      assert(thumbColor != null),
-      assert(colorListener != null),
-      super(key: key);
+  }) : super(key: key);
 
 
   @override
@@ -357,7 +343,7 @@ class _CircleColorPickerState extends State<CircleColorPicker> {
     widget.colorListener(HSVColor
       .fromAHSV(1, degree, 1, 1)
       .toColor()
-      .value);
+      .toARGB32());
     setState(() {
       thumbDistanceToCenter = min(distanceToCenter, widget.radius);
       thumbRadians = theta;

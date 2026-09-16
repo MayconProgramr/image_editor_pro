@@ -73,26 +73,11 @@ double? slider = 0.0;
 class _ImageEditorProState extends State<ImageEditorPro> {
   // create some values
 
-  double _fontSize = 20.0;
-
   void _showFontSizePickerDialog() async {
-    // <-- note the async keyword here
-
-    // this will contain the result from Navigator.pop(context, result)
-    final selectedFontSize = await showDialog<double>(
+    await showDialog<double>(
       context: context,
       builder: (context) => FontSizePickerDialog(),
     );
-
-    // execution of this code continues when the dialog was closed (popped)
-
-    // note that the result can also be null, so check it
-    // (back button or pressed outside of the dialog)
-    if (selectedFontSize != null) {
-      setState(() {
-        _fontSize = selectedFontSize;
-      });
-    }
   }
 
   // ValueChanged<Color> callback
@@ -105,10 +90,7 @@ class _ImageEditorProState extends State<ImageEditorPro> {
   List<Offset?> _points = <Offset?>[];
   List type = [];
   List aligment = [];
-  File? _imageFile;
-  final _sizeImage = GlobalKey();
   final GlobalKey globalKey = new GlobalKey();
-  File? _image;
   ScreenshotController screenshotController = ScreenshotController();
   late Timer timeprediction;
 
@@ -139,12 +121,10 @@ class _ImageEditorProState extends State<ImageEditorPro> {
     sliderDiscreteValue = 5;
   }
 
-  var _colorSig = Colors.orangeAccent.withOpacity(0.3);
-  var _changeColor = false;
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: true,
       child: Scaffold(
         backgroundColor: widget.backgroundScaffold,
         key: scaf,
@@ -162,7 +142,6 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  _imageFile = null;
                   screenshotController
                       .capture(
                           delay: Duration(milliseconds: 500), pixelRatio: 1.5)
@@ -332,9 +311,9 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                 height: 80,
                 alignment: AlignmentDirectional.center,
                 color: widget.bottomBarColor,
-                child: ButtonBar(
+                child: OverflowBar(
                   alignment: MainAxisAlignment.spaceEvenly,
-                  buttonPadding: EdgeInsets.symmetric(horizontal: 5),
+                  spacing: 10,
                   children: [
                     TextButton(
                       child: Column(
@@ -390,7 +369,7 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                       child: Column(
                         children: [
                           FaIcon(
-                            FontAwesomeIcons.smile,
+                            FontAwesomeIcons.faceSmile,
                             color: Colors.white,
                           ),
                           Text(
@@ -445,15 +424,8 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                     ),
                   ],
                 ),
-              )), 
-      onWillPop:  _willPopCallback);
+              )));
   }
-
-  Future<bool> _willPopCallback() async {
-   // await showDialog or Show add banners or whatever
-   // then
-   return Future.value(true);
-}
 
   final picker = ImagePicker();
 
@@ -500,7 +472,6 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                                     setState(() {
                                       height = decodedImage.height as double;
                                       width = decodedImage.width as double;
-                                      _image = File(image.path);
                                     });
                                     setState(() => _controller.clear());
                                     Navigator.pop(context);
@@ -529,7 +500,6 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                                   setState(() {
                                     height = decodedImage.height as double;
                                     width = decodedImage.width as double;
-                                    _image = File(image.path);
                                   });
                                   setState(() => _controller.clear());
                                   Navigator.pop(context);
@@ -661,36 +631,40 @@ class _SlidersState extends State<Sliders> {
     });
   }
 
+  /// Converts a wide-gamut [Color] component (0.0-1.0) back to the classic
+  /// 0-255 int range used by the color-blending math below.
+  static int _channel(double value) => (value * 255.0).round().clamp(0, 255);
+
   Color? _calculateShadedColor(double position) {
     double ratio = position / widget.width;
     if (ratio > 0.5) {
       //Calculate new color (values converge to 255 to make the color lighter)
-      int redVal = _currentColor!.red != 255
-          ? (_currentColor!.red +
-                  (255 - _currentColor!.red) * (ratio - 0.5) / 0.5)
+      int redVal = _channel(_currentColor!.r) != 255
+          ? (_channel(_currentColor!.r) +
+                  (255 - _channel(_currentColor!.r)) * (ratio - 0.5) / 0.5)
               .round()
           : 255;
-      int greenVal = _currentColor!.green != 255
-          ? (_currentColor!.green +
-                  (255 - _currentColor!.green) * (ratio - 0.5) / 0.5)
+      int greenVal = _channel(_currentColor!.g) != 255
+          ? (_channel(_currentColor!.g) +
+                  (255 - _channel(_currentColor!.g)) * (ratio - 0.5) / 0.5)
               .round()
           : 255;
-      int blueVal = _currentColor!.blue != 255
-          ? (_currentColor!.blue +
-                  (255 - _currentColor!.blue) * (ratio - 0.5) / 0.5)
+      int blueVal = _channel(_currentColor!.b) != 255
+          ? (_channel(_currentColor!.b) +
+                  (255 - _channel(_currentColor!.b)) * (ratio - 0.5) / 0.5)
               .round()
           : 255;
       return Color.fromARGB(255, redVal, greenVal, blueVal);
     } else if (ratio < 0.5) {
       //Calculate new color (values converge to 0 to make the color darker)
-      int redVal = _currentColor!.red != 0
-          ? (_currentColor!.red * ratio / 0.5).round()
+      int redVal = _channel(_currentColor!.r) != 0
+          ? (_channel(_currentColor!.r) * ratio / 0.5).round()
           : 0;
-      int greenVal = _currentColor!.green != 0
-          ? (_currentColor!.green * ratio / 0.5).round()
+      int greenVal = _channel(_currentColor!.g) != 0
+          ? (_channel(_currentColor!.g) * ratio / 0.5).round()
           : 0;
-      int blueVal = _currentColor!.blue != 0
-          ? (_currentColor!.blue * ratio / 0.5).round()
+      int blueVal = _channel(_currentColor!.b) != 0
+          ? (_channel(_currentColor!.b) * ratio / 0.5).round()
           : 0;
       return Color.fromARGB(255, redVal, greenVal, blueVal);
     } else {
@@ -711,21 +685,20 @@ class _SlidersState extends State<Sliders> {
       _currentColor = _colors[index];
     } else {
       //calculate new color
-      int redValue = _colors[index].red == _colors[index + 1].red
-          ? _colors[index].red
-          : (_colors[index].red +
-                  (_colors[index + 1].red - _colors[index].red) * remainder)
-              .round();
-      int greenValue = _colors[index].green == _colors[index + 1].green
-          ? _colors[index].green
-          : (_colors[index].green +
-                  (_colors[index + 1].green - _colors[index].green) * remainder)
-              .round();
-      int blueValue = _colors[index].blue == _colors[index + 1].blue
-          ? _colors[index].blue
-          : (_colors[index].blue +
-                  (_colors[index + 1].blue - _colors[index].blue) * remainder)
-              .round();
+      int red1 = _channel(_colors[index].r);
+      int red2 = _channel(_colors[index + 1].r);
+      int redValue =
+          red1 == red2 ? red1 : (red1 + (red2 - red1) * remainder).round();
+      int green1 = _channel(_colors[index].g);
+      int green2 = _channel(_colors[index + 1].g);
+      int greenValue = green1 == green2
+          ? green1
+          : (green1 + (green2 - green1) * remainder).round();
+      int blue1 = _channel(_colors[index].b);
+      int blue2 = _channel(_colors[index + 1].b);
+      int blueValue = blue1 == blue2
+          ? blue1
+          : (blue1 + (blue2 - blue1) * remainder).round();
       _currentColor = Color.fromARGB(255, redValue, greenValue, blueValue);
     }
     return _currentColor;
@@ -905,7 +878,7 @@ class _FontSizePickerDialogState extends State<FontSizePickerDialog> {
           ColorPicker(
             pickerColor: pickerColor,
             onColorChanged: changeColor,
-            showLabel: false,
+            labelTypes: const [],
             pickerAreaHeightPercent: 0.4,
           ),
           Slider(
