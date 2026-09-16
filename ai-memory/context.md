@@ -17,6 +17,7 @@
 - Pasta do package SPM no iOS **precisa** se chamar exatamente igual ao nome do package Dart (`image_editor_pro`), tanto o nome do diretório em `ios/` quanto (para dependências git) o nome do repositório no GitHub — SwiftPM deriva a "identity" do pacote a partir do nome do diretório/repo, não do campo `name:` do `Package.swift`.
 - SPM (via integração do Xcode usada pelo Flutter) **não suporta** target com Swift + Objective-C misturados no mesmo target ("mixed language source files; feature not supported") — plugins com shim ObjC precisam remover o shim e apontar `pluginClass` direto pra classe Swift, ou dividir em dois targets separados.
 - pubspec.yaml usa o formato moderno `flutter.plugin.platforms` (android/ios separados), não mais o campo legado único `pluginClass` compartilhado entre plataformas.
+- Configuração Android (`example/android`) deve ficar alinhada com a do app real consumidor `app-vistoria` (Gradle, AGP, Kotlin, compileSdk, ndkVersion) — são projetos irmãos e `app-vistoria` já builda em produção, então serve de referência quando o `example/` estiver desatualizado.
 
 ## Estrutura Relevante
 - `ios/image_editor_pro/Sources/image_editor_pro/SwiftImageEditorProPlugin.swift` — implementação única do plugin no iOS
