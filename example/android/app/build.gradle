@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "zeeshux7860.theindianappguy.image_editor_pro_example"
-    compileSdk = 35
-    ndkVersion = "28.0.12674087 rc2"
+    compileSdk = 36
+    ndkVersion = "28.0.12674087"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
