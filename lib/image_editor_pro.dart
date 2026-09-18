@@ -29,8 +29,10 @@ var widthPen = 5.0;
 Color pickerColor = Color(0xffB22222);
 Color currentColor = Color(0xffB22222);
 
-SignatureController _controller =
-    SignatureController(penStrokeWidth: widthPen, penColor: Color(0xffB22222));
+SignatureController _controller = SignatureController(
+  penStrokeWidth: widthPen,
+  penColor: Color(0xffB22222),
+);
 
 class _SliderIndicatorPainter extends CustomPainter {
   final double? position;
@@ -38,7 +40,10 @@ class _SliderIndicatorPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawCircle(
-        Offset(position!, size.height / 2), 15, Paint()..color = Colors.black);
+      Offset(position!, size.height / 2),
+      15,
+      Paint()..color = Colors.black,
+    );
   }
 
   @override
@@ -128,9 +133,13 @@ class _ImageEditorProState extends State<ImageEditorPro> {
       child: Scaffold(
         backgroundColor: widget.backgroundScaffold,
         key: scaf,
-        appBar: new AppBar(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black87,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
           leading: IconButton(
-            icon: const HeroIcon(HeroIcons.arrowLeft, color: Colors.white),
+            icon: const HeroIcon(HeroIcons.arrowLeft, color: Colors.black87),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -140,10 +149,12 @@ class _ImageEditorProState extends State<ImageEditorPro> {
               padding: const EdgeInsets.only(right: 12),
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: widget.appBarColor,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  backgroundColor: widget.appBarColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 8,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -155,82 +166,87 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                 onPressed: () {
                   screenshotController
                       .capture(
-                          delay: Duration(milliseconds: 500), pixelRatio: 1.5)
+                        delay: Duration(milliseconds: 500),
+                        pixelRatio: 1.5,
+                      )
                       .then((binaryIntList) async {
-                    final paths =
-                        widget.pathSave ?? await getTemporaryDirectory();
-                    final name = widget.nameSave ??
-                        DateTime.now().millisecondsSinceEpoch.toString();
+                        final paths =
+                            widget.pathSave ?? await getTemporaryDirectory();
+                        final name =
+                            widget.nameSave ??
+                            DateTime.now().millisecondsSinceEpoch.toString();
 
-                    print("local salvo: ${paths.path}");
+                        print("local salvo: ${paths.path}");
 
-                    final file =
-                        await File('${paths.path}/' + name.toString() + '.jpg')
-                            .create();
-                    file.writeAsBytesSync(binaryIntList!);
+                        final file = await File(
+                          '${paths.path}/' + name.toString() + '.jpg',
+                        ).create();
+                        file.writeAsBytesSync(binaryIntList!);
 
-                    Navigator.pop(context, file);
-                  }).catchError((onError) {
-                    print(onError);
-                  });
+                        Navigator.pop(context, file);
+                      })
+                      .catchError((onError) {
+                        print(onError);
+                      });
                 },
               ),
             ),
           ],
-          backgroundColor: widget.appBarColor,
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            Flexible(
-              child: Material(
-                clipBehavior: Clip.hardEdge,
-                color: Colors.transparent,
-                child: Screenshot(
-                  controller: screenshotController,
-                  child: Stack(
-                    alignment: AlignmentDirectional.center,
-                    children: <Widget>[
-                      widget.defaultImage != null
-                          ? Image.file(
-                              widget.defaultImage!,
-                              //fit: BoxFit.cover,
-                            )
-                          : Image.asset("assets/capa25463.jpeg"),
-                      Positioned.fill(
-                        child: RepaintBoundary(
-                          key: globalKey,
-                          child: Center(
+              Flexible(
+                child: Material(
+                  clipBehavior: Clip.hardEdge,
+                  color: Colors.transparent,
+                  child: Screenshot(
+                    controller: screenshotController,
+                    child: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: <Widget>[
+                        widget.defaultImage != null
+                            ? Image.file(
+                                widget.defaultImage!,
+                                //fit: BoxFit.cover,
+                              )
+                            : Image.asset("assets/capa25463.jpeg"),
+                        Positioned.fill(
+                          child: RepaintBoundary(
+                            key: globalKey,
+                            child: Center(
                               child: GestureDetector(
-                                  onPanUpdate: (DragUpdateDetails details) {
-                                    setState(() {
-                                      RenderBox object =
-                                          context.findRenderObject() as RenderBox;
-                                      Offset _localPosition = object
-                                          .globalToLocal(details.globalPosition);
-                                      _points = new List.from(_points)
-                                        ..add(_localPosition);
-                                    });
-                                  },
-                                  onPanEnd: (DragEndDetails details) {
-                                    _points.add(null);
-                                  },
-                                  child: Flex(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Expanded(
-                                        child: Signature(
-                                          controller: _controller,
-                                          backgroundColor:
-                                              Colors.transparent, // _colorSig
-                                        ),
+                                onPanUpdate: (DragUpdateDetails details) {
+                                  setState(() {
+                                    RenderBox object =
+                                        context.findRenderObject() as RenderBox;
+                                    Offset _localPosition = object
+                                        .globalToLocal(details.globalPosition);
+                                    _points = new List.from(_points)
+                                      ..add(_localPosition);
+                                  });
+                                },
+                                onPanEnd: (DragEndDetails details) {
+                                  _points.add(null);
+                                },
+                                child: Flex(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Expanded(
+                                      child: Signature(
+                                        controller: _controller,
+                                        backgroundColor:
+                                            Colors.transparent, // _colorSig
                                       ),
-                                    ],
-                                  ))),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      /*TextButton(
+                        /*TextButton(
                         child: Text('teste'),
                         onPressed: () {
                           setState(() {
@@ -242,230 +258,220 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                             _changeColor = !_changeColor;
                           });
                         }),*/
-                      Positioned.fill(
-                        child: Stack(
-                          children: multiwidget.asMap().entries.map((f) {
-                            return type[f.key] == 1
-                                ? EmojiView(
-                                    left: offsets[f.key].dx + 20,
-                                    top: offsets[f.key].dy + 20,
-                                    ontap: () {
-                                       showModalBottomSheet(
+                        Positioned.fill(
+                          child: Stack(
+                            children: multiwidget.asMap().entries.map((f) {
+                              return type[f.key] == 1
+                                  ? EmojiView(
+                                      left: offsets[f.key].dx + 20,
+                                      top: offsets[f.key].dy + 20,
+                                      ontap: () {
+                                        showModalBottomSheet(
                                           context: context,
                                           isDismissible: false,
                                           enableDrag: false,
                                           builder: (ctx) {
                                             return Sliders(
                                               size: f.key,
-                                              sizevalue: fontsize[f.key].toDouble(),
+                                              sizevalue: fontsize[f.key]
+                                                  .toDouble(),
                                               tipo: "emoji",
                                             );
+                                          },
+                                        );
+                                        setState(() {});
+                                      },
+                                      onpanupdate: (details) {
+                                        setState(() {
+                                          offsets[f.key] = Offset(
+                                            offsets[f.key].dx +
+                                                details.delta.dx,
+                                            offsets[f.key].dy +
+                                                details.delta.dy,
+                                          );
                                         });
-                                      setState(() {});
-                                    },
-                                    onpanupdate: (details) {
-                                      setState(() {
-                                        offsets[f.key] = Offset(
-                                            offsets[f.key].dx + details.delta.dx,
-                                            offsets[f.key].dy + details.delta.dy);
-                                      });
-                                    },
-                                    value: f.value.toString(),
-                                    fontsize: fontsize[f.key].toDouble(),
-                                    align: TextAlign.center,
-                                  )
-                                : type[f.key] == 2
-                                    ? TextView(
-                                        left: offsets[f.key].dx + 20,
-                                        top: offsets[f.key].dy + 20,
-                                        ontap: () {
-                                          showModalBottomSheet(
-                                            context: context,
-                                            isDismissible: false,
-                                            enableDrag: false,
-                                            builder: (ctx) {
-                                              return Sliders(
-                                                size: f.key,
-                                                sizevalue:
-                                                  fontsize[f.key].toDouble(),
-                                                tipo: "texto",
-                                              );
-                                          });
-                                        },
-                                        onpanupdate: (details) {
-                                          setState(() {
-                                            offsets[f.key] = Offset(
-                                                offsets[f.key].dx +
-                                                    details.delta.dx,
-                                                offsets[f.key].dy +
-                                                    details.delta.dy);
-                                          });
-                                        },
-                                        value: f.value.toString(),
-                                        fontsize: fontsize[f.key].toDouble(),
-                                        align: TextAlign.center,
-                                        fontColor: fontColor[f.key],
-                                      )
-                                    : Container();
-                          }).toList(),
+                                      },
+                                      value: f.value.toString(),
+                                      fontsize: fontsize[f.key].toDouble(),
+                                      align: TextAlign.center,
+                                    )
+                                  : type[f.key] == 2
+                                  ? TextView(
+                                      left: offsets[f.key].dx + 20,
+                                      top: offsets[f.key].dy + 20,
+                                      ontap: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isDismissible: false,
+                                          enableDrag: false,
+                                          builder: (ctx) {
+                                            return Sliders(
+                                              size: f.key,
+                                              sizevalue: fontsize[f.key]
+                                                  .toDouble(),
+                                              tipo: "texto",
+                                            );
+                                          },
+                                        );
+                                      },
+                                      onpanupdate: (details) {
+                                        setState(() {
+                                          offsets[f.key] = Offset(
+                                            offsets[f.key].dx +
+                                                details.delta.dx,
+                                            offsets[f.key].dy +
+                                                details.delta.dy,
+                                          );
+                                        });
+                                      },
+                                      value: f.value.toString(),
+                                      fontsize: fontsize[f.key].toDouble(),
+                                      align: TextAlign.center,
+                                      fontColor: fontColor[f.key],
+                                    )
+                                  : Container();
+                            }).toList(),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ]),
+            ],
+          ),
         ),
         bottomNavigationBar: openbottomsheet
             ? Container()
             : Container(
-                padding: EdgeInsets.all(0.0),
-                height: 80,
-                alignment: AlignmentDirectional.center,
-                color: widget.bottomBarColor,
-                child: OverflowBar(
-                  alignment: MainAxisAlignment.spaceEvenly,
-                  spacing: 10,
+                height: 76,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(top: BorderSide(color: Colors.grey.shade200)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: const Size(64, 56),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 6),
+                    Expanded(
+                      child: _toolbarButton(
+                        icon: HeroIcons.paintBrush,
+                        label: 'Pintar',
+                        onTap: () {
+                          _showFontSizePickerDialog();
+                        },
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const HeroIcon(
-                            HeroIcons.paintBrush,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Pintar',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        _showFontSizePickerDialog();
-                      },
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: const Size(64, 56),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 6),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const HeroIcon(
-                            HeroIcons.pencilSquare,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Texto',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                      onPressed: () async {
-                        final value = await Navigator.push(
+                    _toolbarDivider(),
+                    Expanded(
+                      child: _toolbarButton(
+                        icon: HeroIcons.language,
+                        label: 'Texto',
+                        onTap: () async {
+                          final value = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TextEditor(
-                                      appBarColor: widget.appBarColor,
-                                      bottomColor: widget.bottomBarColor,
-                                    )));
-                        if (value.toString().isEmpty || value == null) {
-                          //print("true");
-                        } else {
-                          type.add(2);
-                          fontsize.add(30);
-                          fontColor.add(Colors.black);
-                          offsets.add(Offset.zero);
-                          multiwidget.add(value);
-                          howmuchwidgetis++;
-                        }
-                      },
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: const Size(64, 56),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 6),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const HeroIcon(
-                            HeroIcons.faceSmile,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Emoji',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        Future getemojis = showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Emojies();
-                            });
-                        getemojis.then((value) {
+                              builder: (context) => TextEditor(
+                                appBarColor: widget.appBarColor,
+                                bottomColor: widget.bottomBarColor,
+                              ),
+                            ),
+                          );
                           if (value.toString().isEmpty || value == null) {
-                            print("emoji vazio");
-                          }else{
-                            type.add(1);
-                            fontsize.add(40);
-                            offsets.add(Offset.zero);
+                            //print("true");
+                          } else {
+                            type.add(2);
+                            fontsize.add(30);
                             fontColor.add(Colors.black);
+                            offsets.add(Offset.zero);
                             multiwidget.add(value);
                             howmuchwidgetis++;
                           }
-                        });
-                      },
+                        },
+                      ),
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: const Size(64, 56),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 6),
+                    _toolbarDivider(),
+                    Expanded(
+                      child: _toolbarButton(
+                        icon: HeroIcons.faceSmile,
+                        label: 'Emoji',
+                        onTap: () {
+                          Future getemojis = showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Emojies();
+                            },
+                          );
+                          getemojis.then((value) {
+                            if (value.toString().isEmpty || value == null) {
+                              print("emoji vazio");
+                            } else {
+                              type.add(1);
+                              fontsize.add(40);
+                              offsets.add(Offset.zero);
+                              fontColor.add(Colors.black);
+                              multiwidget.add(value);
+                              howmuchwidgetis++;
+                            }
+                          });
+                        },
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const HeroIcon(
-                            HeroIcons.trash,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Limpar',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
+                    ),
+                    _toolbarDivider(),
+                    Expanded(
+                      child: _toolbarButton(
+                        icon: HeroIcons.trash,
+                        label: 'Limpar',
+                        onTap: () {
+                          _controller.clear();
+                          type.clear();
+                          fontsize.clear();
+                          offsets.clear();
+                          fontColor.clear();
+                          multiwidget.clear();
+                          howmuchwidgetis = 0;
+                          setState(() {});
+                        },
                       ),
-                      onPressed: () {
-                        _controller.clear();
-                        type.clear();
-                        fontsize.clear();
-                        offsets.clear();
-                        fontColor.clear();
-                        multiwidget.clear();
-                        howmuchwidgetis = 0;
-                        setState(() {});
-                      },
                     ),
                   ],
                 ),
-              )));
+              ),
+      ),
+    );
+  }
+
+  /// Divisor vertical fino entre os botões da toolbar inferior.
+  Widget _toolbarDivider() => Container(width: 1, color: Colors.grey.shade200);
+
+  /// Botão ícone+label da toolbar inferior (Pintar/Texto/Emoji/Limpar) —
+  /// cor vem de [widget.bottomBarColor], tap target full-height/expandido.
+  Widget _toolbarButton({
+    required HeroIcons icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    final color = widget.bottomBarColor ?? Colors.black87;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HeroIcon(icon, size: 22, color: color),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   final picker = ImagePicker();
@@ -477,9 +483,10 @@ class _ImageEditorProState extends State<ImageEditorPro> {
       context: context,
       builder: (BuildContext context) {
         return new Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 10.9, color: Colors.grey[400]!)
-          ]),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [BoxShadow(blurRadius: 10.9, color: Colors.grey[400]!)],
+          ),
           height: 170,
           child: new Column(
             children: <Widget>[
@@ -487,9 +494,7 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                 padding: const EdgeInsets.all(20.0),
                 child: new Text("Select Image Options"),
               ),
-              Divider(
-                height: 1,
-              ),
+              Divider(height: 1),
               new Container(
                 padding: EdgeInsets.all(20),
                 child: Row(
@@ -503,22 +508,25 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                           child: Column(
                             children: <Widget>[
                               IconButton(
-                                  icon: Icon(Icons.photo_library),
-                                  onPressed: () async {
-                                    var image = await picker.pickImage(source: ImageSource.camera);
-                                    var decodedImage =
-                                        await decodeImageFromList(
-                                            File(image!.path).readAsBytesSync());
+                                icon: Icon(Icons.photo_library),
+                                onPressed: () async {
+                                  var image = await picker.pickImage(
+                                    source: ImageSource.camera,
+                                  );
+                                  var decodedImage = await decodeImageFromList(
+                                    File(image!.path).readAsBytesSync(),
+                                  );
 
-                                    setState(() {
-                                      height = decodedImage.height as double;
-                                      width = decodedImage.width as double;
-                                    });
-                                    setState(() => _controller.clear());
-                                    Navigator.pop(context);
-                                  }),
+                                  setState(() {
+                                    height = decodedImage.height as double;
+                                    width = decodedImage.width as double;
+                                  });
+                                  setState(() => _controller.clear());
+                                  Navigator.pop(context);
+                                },
+                              ),
                               SizedBox(width: 10),
-                              Text("Open Gallery")
+                              Text("Open Gallery"),
                             ],
                           ),
                         ),
@@ -531,29 +539,32 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                         child: Column(
                           children: <Widget>[
                             IconButton(
-                                icon: Icon(Icons.camera_alt),
-                                onPressed: () async {
-                                  var image = await picker.pickImage(
-                                      source: ImageSource.gallery);
-                                  var decodedImage = await decodeImageFromList(
-                                      File(image!.path).readAsBytesSync());
+                              icon: Icon(Icons.camera_alt),
+                              onPressed: () async {
+                                var image = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                );
+                                var decodedImage = await decodeImageFromList(
+                                  File(image!.path).readAsBytesSync(),
+                                );
 
-                                  setState(() {
-                                    height = decodedImage.height as double;
-                                    width = decodedImage.width as double;
-                                  });
-                                  setState(() => _controller.clear());
-                                  Navigator.pop(context);
-                                }),
+                                setState(() {
+                                  height = decodedImage.height as double;
+                                  width = decodedImage.width as double;
+                                });
+                                setState(() => _controller.clear());
+                                Navigator.pop(context);
+                              },
+                            ),
                             SizedBox(width: 10),
-                            Text("Open Camera")
+                            Text("Open Camera"),
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -583,14 +594,15 @@ class _SignatState extends State<Signat> {
   @override
   Widget build(BuildContext context) {
     return //SIGNATURE CANVAS
-        //SIGNATURE CANVAS
-        ListView(
+    //SIGNATURE CANVAS
+    ListView(
       children: <Widget>[
         Signature(
-            controller: _controller,
-            //height: height.toDouble(),
-            //width: width.toDouble(),
-            backgroundColor: Colors.transparent),
+          controller: _controller,
+          //height: height.toDouble(),
+          //width: width.toDouble(),
+          backgroundColor: Colors.transparent,
+        ),
       ],
     );
   }
@@ -602,9 +614,13 @@ class Sliders extends StatefulWidget {
   final String? tipo;
   final double width;
 
-  const Sliders(
-      {Key? key, this.size, this.sizevalue, this.tipo, this.width = 300})
-      : super(key: key);
+  const Sliders({
+    Key? key,
+    this.size,
+    this.sizevalue,
+    this.tipo,
+    this.width = 300,
+  }) : super(key: key);
 
   @override
   _SlidersState createState() => _SlidersState();
@@ -682,18 +698,18 @@ class _SlidersState extends State<Sliders> {
       //Calculate new color (values converge to 255 to make the color lighter)
       int redVal = _channel(_currentColor!.r) != 255
           ? (_channel(_currentColor!.r) +
-                  (255 - _channel(_currentColor!.r)) * (ratio - 0.5) / 0.5)
-              .round()
+                    (255 - _channel(_currentColor!.r)) * (ratio - 0.5) / 0.5)
+                .round()
           : 255;
       int greenVal = _channel(_currentColor!.g) != 255
           ? (_channel(_currentColor!.g) +
-                  (255 - _channel(_currentColor!.g)) * (ratio - 0.5) / 0.5)
-              .round()
+                    (255 - _channel(_currentColor!.g)) * (ratio - 0.5) / 0.5)
+                .round()
           : 255;
       int blueVal = _channel(_currentColor!.b) != 255
           ? (_channel(_currentColor!.b) +
-                  (255 - _channel(_currentColor!.b)) * (ratio - 0.5) / 0.5)
-              .round()
+                    (255 - _channel(_currentColor!.b)) * (ratio - 0.5) / 0.5)
+                .round()
           : 255;
       return Color.fromARGB(255, redVal, greenVal, blueVal);
     } else if (ratio < 0.5) {
@@ -728,8 +744,9 @@ class _SlidersState extends State<Sliders> {
       //calculate new color
       int red1 = _channel(_colors[index].r);
       int red2 = _channel(_colors[index + 1].r);
-      int redValue =
-          red1 == red2 ? red1 : (red1 + (red2 - red1) * remainder).round();
+      int redValue = red1 == red2
+          ? red1
+          : (red1 + (red2 - red1) * remainder).round();
       int green1 = _channel(_colors[index].g);
       int green2 = _channel(_colors[index + 1].g);
       int greenValue = green1 == green2
@@ -748,127 +765,136 @@ class _SlidersState extends State<Sliders> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: widget.tipo != "emoji" ? 230 : 150,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Stack(
-                children: [
-                  Center(
-                      child: Text(
+      height: widget.tipo != "emoji" ? 230 : 150,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Stack(
+              children: [
+                Center(
+                  child: Text(
                     widget.tipo != "emoji" ? "Cor e tamanho" : "Tamanho",
                     style: TextStyle(fontSize: 18),
-                  )),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const HeroIcon(
-                        HeroIcons.xMark,
-                        size: 25,
-                        color: Colors.black,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const HeroIcon(
+                      HeroIcons.xMark,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        fontsize[widget.size!] = 0;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: const HeroIcon(
+                      HeroIcons.trash,
+                      size: 25,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          widget.tipo != "emoji"
+              ? Center(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onHorizontalDragStart: (DragStartDetails details) {
+                      //print("_-------------------------STARTED DRAG");
+                      _colorChangeHandler(details.localPosition.dx);
+                    },
+                    onHorizontalDragUpdate: (DragUpdateDetails details) {
+                      _colorChangeHandler(details.localPosition.dx);
+                    },
+                    onTapDown: (TapDownDetails details) {
+                      _colorChangeHandler(details.localPosition.dx);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Container(
+                        width: widget.width,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey[800]!,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(colors: _colors),
+                        ),
+                        child: CustomPaint(
+                          painter: _SliderIndicatorPainter(
+                            _colorSliderPosition,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          fontsize[widget.size!] = 0;
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: const HeroIcon(
-                        HeroIcons.trash,
-                        size: 25,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            widget.tipo != "emoji"
-                ? Center(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onHorizontalDragStart: (DragStartDetails details) {
-                        //print("_-------------------------STARTED DRAG");
-                        _colorChangeHandler(details.localPosition.dx);
-                      },
-                      onHorizontalDragUpdate: (DragUpdateDetails details) {
-                        _colorChangeHandler(details.localPosition.dx);
-                      },
-                      onTapDown: (TapDownDetails details) {
-                        _colorChangeHandler(details.localPosition.dx);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Container(
-                          width: widget.width,
-                          height: 15,
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(width: 1, color: Colors.grey[800]!),
-                            borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(colors: _colors),
+                )
+              : Container(),
+          widget.tipo != "emoji"
+              ? Center(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onHorizontalDragStart: (DragStartDetails details) {
+                      //print("_-------------------------STARTED DRAG");
+                      _shadeChangeHandler(details.localPosition.dx);
+                    },
+                    onHorizontalDragUpdate: (DragUpdateDetails details) {
+                      _shadeChangeHandler(details.localPosition.dx);
+                    },
+                    onTapDown: (TapDownDetails details) {
+                      _shadeChangeHandler(details.localPosition.dx);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Container(
+                        width: widget.width,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey[800]!,
                           ),
-                          child: CustomPaint(
-                            painter:
-                                _SliderIndicatorPainter(_colorSliderPosition),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(),
-            widget.tipo != "emoji"
-                ? Center(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onHorizontalDragStart: (DragStartDetails details) {
-                        //print("_-------------------------STARTED DRAG");
-                        _shadeChangeHandler(details.localPosition.dx);
-                      },
-                      onHorizontalDragUpdate: (DragUpdateDetails details) {
-                        _shadeChangeHandler(details.localPosition.dx);
-                      },
-                      onTapDown: (TapDownDetails details) {
-                        _shadeChangeHandler(details.localPosition.dx);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Container(
-                          width: widget.width,
-                          height: 15,
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(width: 1, color: Colors.grey[800]!),
-                            borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(colors: [
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(
+                            colors: [
                               Colors.black,
                               _currentColor!,
-                              Colors.white
-                            ]),
+                              Colors.white,
+                            ],
                           ),
-                          child: CustomPaint(
-                            painter:
-                                _SliderIndicatorPainter(_shadeSliderPosition),
+                        ),
+                        child: CustomPaint(
+                          painter: _SliderIndicatorPainter(
+                            _shadeSliderPosition,
                           ),
                         ),
                       ),
                     ),
-                  )
-                : Container()
-            /*Container(
+                  ),
+                )
+              : Container(),
+          /*Container(
           height: 50,
           width: 50,
           decoration: BoxDecoration(
@@ -876,25 +902,26 @@ class _SlidersState extends State<Sliders> {
             shape: BoxShape.circle,
           ),
         )*/
-            ,
-            SizedBox(height: 20),
-            Slider(
-                value: slider!,
-                min: 0.0,
-                max: 100.0,
-                onChangeEnd: (v) {
-                  setState(() {
-                    fontsize[widget.size!] = v.toInt();
-                  });
-                },
-                onChanged: (v) {
-                  setState(() {
-                    slider = v;
-                    fontsize[widget.size!] = v.toInt();
-                  });
-                }),
-          ],
-        ));
+          SizedBox(height: 20),
+          Slider(
+            value: slider!,
+            min: 0.0,
+            max: 100.0,
+            onChangeEnd: (v) {
+              setState(() {
+                fontsize[widget.size!] = v.toInt();
+              });
+            },
+            onChanged: (v) {
+              setState(() {
+                slider = v;
+                fontsize[widget.size!] = v.toInt();
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -910,39 +937,41 @@ class _FontSizePickerDialogState extends State<FontSizePickerDialog> {
     setState(() => pickerColor = color);
     var points = _controller.points;
     _controller = SignatureController(
-        penStrokeWidth: widthPen, penColor: color, points: points);
+      penStrokeWidth: widthPen,
+      penColor: color,
+      points: points,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: const Text('Cor e tamanho'),
       content: SingleChildScrollView(
-          child: Column(
-        children: [
-          ColorPicker(
-            pickerColor: pickerColor,
-            onColorChanged: changeColor,
-            labelTypes: const [],
-            pickerAreaHeightPercent: 0.4,
-          ),
-          Slider(
-            value: sliderDiscreteValue,
-            min: 1,
-            max: 10,
-            divisions: 9,
-            label: sliderDiscreteValue.round().toString(),
-            onChanged: (value) {
-              setState(() {
-                sliderDiscreteValue = value;
-              });
-            },
-          ),
-        ],
-      )),
+        child: Column(
+          children: [
+            ColorPicker(
+              pickerColor: pickerColor,
+              onColorChanged: changeColor,
+              labelTypes: const [],
+              pickerAreaHeightPercent: 0.4,
+            ),
+            Slider(
+              value: sliderDiscreteValue,
+              min: 1,
+              max: 10,
+              divisions: 9,
+              label: sliderDiscreteValue.round().toString(),
+              onChanged: (value) {
+                setState(() {
+                  sliderDiscreteValue = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
       actions: <Widget>[
         TextButton(
           child: const Text('Ok'),
@@ -952,9 +981,10 @@ class _FontSizePickerDialogState extends State<FontSizePickerDialog> {
               currentColor = pickerColor;
               var points = _controller.points;
               _controller = SignatureController(
-                  penStrokeWidth: widthPen,
-                  penColor: currentColor,
-                  points: points);
+                penStrokeWidth: widthPen,
+                penColor: currentColor,
+                points: points,
+              );
             });
             Navigator.of(context).pop();
           },
@@ -982,26 +1012,25 @@ class _ColorPiskersSliderState extends State<ColorPiskersSlider> {
             padding: const EdgeInsets.all(15.0),
             child: new Text("Slider Filter Color"),
           ),
-          Divider(
-            height: 1,
-          ),
+          Divider(height: 1),
           SizedBox(height: 20),
           new Text("Slider Color"),
           SizedBox(height: 10),
           BarColorPicker(
-              width: 300,
-              thumbColor: Colors.white,
-              cornerRadius: 10,
-              pickMode: PickMode.Color,
-              colorListener: (int value) {
-                setState(() {
-                  //  currentColor = Color(value);
-                });
-              }),
+            width: 300,
+            thumbColor: Colors.white,
+            cornerRadius: 10,
+            pickMode: PickMode.Color,
+            colorListener: (int value) {
+              setState(() {
+                //  currentColor = Color(value);
+              });
+            },
+          ),
           SizedBox(height: 20),
           new Text("Slider Opicity"),
           SizedBox(height: 10),
-          Slider(value: 0.1, min: 0.0, max: 1.0, onChanged: (v) {})
+          Slider(value: 0.1, min: 0.0, max: 1.0, onChanged: (v) {}),
         ],
       ),
     );
