@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
-  font_awesome_flutter: ^11.0.0
+  heroicons: ^0.11.0
   image_picker: ^1.1.2
   path_provider: ^2.0.12
   screenshot: ^3.0.0

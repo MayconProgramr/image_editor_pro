@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:image_editor_pro/data/data.dart';
 
 class Emojies extends StatefulWidget {
@@ -15,6 +16,7 @@ class _EmojiesState extends State<Emojies> {
         height: MediaQuery.of(context).size.height * 0.6,
         decoration: BoxDecoration(
             color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             boxShadow: [BoxShadow(blurRadius: 10.9, color: Colors.grey[400]!)]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,8 +36,8 @@ class _EmojiesState extends State<Emojies> {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: Icon(
-                        Icons.close,
+                      child: const HeroIcon(
+                        HeroIcons.xMark,
                         size: 25,
                         color: Colors.black,
                       ),

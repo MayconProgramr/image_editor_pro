@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
 
 class TextEditor extends StatefulWidget {
 
@@ -19,7 +20,7 @@ class _TextEditorState extends State<TextEditor> {
       backgroundColor: Colors.white,
       appBar: new AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const HeroIcon(HeroIcons.arrowLeft, color: Colors.white),
           onPressed: (){
             Navigator.of(context).pop();
           },

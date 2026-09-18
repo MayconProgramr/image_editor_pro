@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_editor_pro/modules/all_emojies.dart';
 import 'package:image_editor_pro/modules/colors_picker.dart';
@@ -130,16 +130,27 @@ class _ImageEditorProState extends State<ImageEditorPro> {
         key: scaf,
         appBar: new AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const HeroIcon(HeroIcons.arrowLeft, color: Colors.white),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           actions: <Widget>[
-            new TextButton(
-                child: new Text(
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: widget.appBarColor,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text(
                   "Salvar",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 onPressed: () {
                   screenshotController
@@ -162,7 +173,9 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                   }).catchError((onError) {
                     print(onError);
                   });
-                }),
+                },
+              ),
+            ),
           ],
           backgroundColor: widget.appBarColor,
         ),
@@ -316,12 +329,19 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                   spacing: 10,
                   children: [
                     TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(64, 56),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                      ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(
-                            FontAwesomeIcons.brush,
+                          const HeroIcon(
+                            HeroIcons.paintBrush,
                             color: Colors.white,
                           ),
+                          const SizedBox(height: 4),
                           Text(
                             'Pintar',
                             style: TextStyle(color: Colors.white),
@@ -333,12 +353,19 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                       },
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(64, 56),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                      ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.text_fields,
+                          const HeroIcon(
+                            HeroIcons.pencilSquare,
                             color: Colors.white,
                           ),
+                          const SizedBox(height: 4),
                           Text(
                             'Texto',
                             style: TextStyle(color: Colors.white),
@@ -366,12 +393,19 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                       },
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(64, 56),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                      ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(
-                            FontAwesomeIcons.faceSmile,
+                          const HeroIcon(
+                            HeroIcons.faceSmile,
                             color: Colors.white,
                           ),
+                          const SizedBox(height: 4),
                           Text(
                             'Emoji',
                             style: TextStyle(color: Colors.white),
@@ -399,12 +433,19 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                       },
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(64, 56),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                      ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(
-                            FontAwesomeIcons.eraser,
+                          const HeroIcon(
+                            HeroIcons.trash,
                             color: Colors.white,
                           ),
+                          const SizedBox(height: 4),
                           Text(
                             'Limpar',
                             style: TextStyle(color: Colors.white),
@@ -708,6 +749,10 @@ class _SlidersState extends State<Sliders> {
   Widget build(BuildContext context) {
     return Container(
         height: widget.tipo != "emoji" ? 230 : 150,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
         child: Column(
           children: <Widget>[
             Padding(
@@ -725,8 +770,8 @@ class _SlidersState extends State<Sliders> {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: Icon(
-                        Icons.close,
+                      child: const HeroIcon(
+                        HeroIcons.xMark,
                         size: 25,
                         color: Colors.black,
                       ),
@@ -741,8 +786,8 @@ class _SlidersState extends State<Sliders> {
                         });
                         Navigator.of(context).pop();
                       },
-                      child: Icon(
-                        Icons.delete,
+                      child: const HeroIcon(
+                        HeroIcons.trash,
                         size: 25,
                         color: Colors.redAccent,
                       ),
@@ -871,6 +916,9 @@ class _FontSizePickerDialogState extends State<FontSizePickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       title: const Text('Cor e tamanho'),
       content: SingleChildScrollView(
           child: Column(
