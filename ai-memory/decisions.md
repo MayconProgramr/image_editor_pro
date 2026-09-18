@@ -28,5 +28,13 @@
 - **Decisão:** Publicada tag `v6.4` (lint fix em `lib/` + alinhamento Android do `example/`), `app-vistoria/pubspec.yaml` apontado pra `v6.4`. Validado com `pub get` + `flutter analyze` (limpo) + `pod install` + `flutter build ios --simulator --no-codesign` (sucesso) direto em `app-vistoria`.
 - **Motivo:** Consumidor real só recebe correções de uma tag nova; `v6.3` não tinha os fixes de lint/Android feitos nesta sessão.
 
+## [2026-09-18] Redesign visual do editor de imagem (Pintar/Texto/Emoji/Limpar)
+- **Decisão:** Substituídos `FontAwesomeIcons`/`Icons.*` por `HeroIcon` (estilo outline, pacote `heroicons: ^0.11.0`) na AppBar, na toolbar inferior (Pintar/Texto/Emoji/Limpar), no diálogo de cor/tamanho (`FontSizePickerDialog`/`Sliders`) e no bottom sheet de emoji (`Emojies`). Botão "Salvar" da AppBar passou de `TextButton` cru pra pill branco preenchido. `FontSizePickerDialog` e os bottom sheets (`Sliders`, `Emojies`) ganharam cantos arredondados. Toolbar ganhou `minimumSize` nos botões pra tap target melhor. Removida a dependência `font_awesome_flutter` (ficou sem nenhum uso após a troca).
+- **Motivo:** Alinhar a única tela do fluxo de fotos que ainda não tinha passado pelo redesign visual "SAMI Design System" do `app-vistoria` (chrome claro, ícones outline, radius 8-12px), conforme `CONTEXTO_REDESIGN.md`. Contrato público do widget (`ImageEditorPro`) e a lógica de desenho/texto/emoji/salvar foram preservados; cores continuam vindo de `appBarColor`/`bottomBarColor` (pacote consumido por mais de um app).
+
+## [2026-09-18] Validação de UI restrita a `flutter analyze`, sem rodar o app
+- **Decisão:** Nesta sessão a validação do redesign visual ficou limitada a `flutter analyze` (limpo em `lib/` e `example/`) — sem build/run em emulador Android nem simulador iOS.
+- **Motivo:** Usuário pediu explicitamente pra nunca rodar o app/emulador por conta própria; validação visual real é feita manualmente por ele em Android/iOS.
+
 ---
 > Decisões anteriores arquivadas em: ai-memory/history/decisions-history.md

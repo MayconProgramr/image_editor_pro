@@ -1,6 +1,8 @@
 # Tarefas do Projeto
 
 ### Pendentes
+- Commitar neste repo (`image_editor_pro`) as mudanças do redesign visual do editor (`pubspec.yaml`, `lib/image_editor_pro.dart`, `lib/modules/all_emojies.dart`, `lib/modules/text.dart`) — feitas nesta sessão, ainda não commitadas.
+- Testar visualmente (Android/iOS, manualmente pelo usuário) o redesign do editor de imagem antes de publicar tag nova — validação nesta sessão ficou só em `flutter analyze`.
 - Em `app-vistoria`: commitar `pubspec.yaml` (`ref: v6.4`) — só editado e validado localmente, não commitado nesta sessão.
 - Testar build local do `example/` deste repo no iOS (falha hoje por questão cosmética: a pasta local se chama `EditorImagem`, não `image_editor_pro`, e SwiftPM exige nome do diretório = nome do package para dependências `path:`; não afeta consumidores reais via git). Decidir se vale renomear a pasta local.
 - Em `app-vistoria`: revisar e commitar `pubspec.yaml` (URL/ref atualizados pra `image_editor_pro.git` / `v6.3`) — não foi commitado nesta sessão, só editado e validado localmente.
@@ -10,6 +12,7 @@
 - (nenhuma)
 
 ### Concluídas
+- Redesign visual da tela de editor de imagem (AppBar, toolbar Pintar/Texto/Emoji/Limpar, diálogos de cor/tamanho/emoji): troca de `FontAwesomeIcons`/`Icons.*` por `HeroIcon`, botão "Salvar" em pill preenchido, cantos arredondados nos bottom sheets/dialog, `font_awesome_flutter` removido — `flutter analyze` limpo em `lib/` e `example/`.
 - Reestruturação do plugin iOS pra suportar SPM + CocoaPods dual (commits `24623b7`, `7ed47f9` no repo `image_editor_pro`, tags `v6.2` e `v6.3`).
 - Rename do repositório GitHub `EditorImagem` → `image_editor_pro`.
 - Validação de build real em `app-vistoria` (consumidor via git) com `flutter build ios --simulator --no-codesign` — sucesso, warning de SPM não aparece mais.
